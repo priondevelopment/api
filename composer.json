@@ -1,0 +1,42 @@
+{
+    "name": "priondevelopment/api",
+    "description": "Authenticate API Tokens.",
+    "license": "MIT",
+    "homepage": "https://priondevelopment.com/packages/api",
+    "support": {
+        "issues": "https://github.com/prion-development/api/issues",
+        "source": "https://github.com/prion-development/api"
+    },
+    "authors": [
+        {
+            "name": "Brandon Best",
+            "email": "brandonbest@priondevelopmnt.com"
+        }
+    ],
+    "require": {
+        "php": "^7.1.1",
+        "watson/rememberable": "^2.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src"
+        ],
+        "psr-4": {
+            "PrionApi\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "PrionApi\\Providers\\PrionApiServiceProvider"
+            ],
+            "aliases": {
+                "PrionApi": "PrionApi\\PrionApiFacade"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev"
+}
