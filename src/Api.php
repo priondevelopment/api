@@ -1,6 +1,6 @@
 <?php
 
-namespace PrionApi;
+namespace Api;
 
 /**
  * This class is the main entry point of laratrust. Usually this the interaction
@@ -10,7 +10,7 @@ namespace PrionApi;
  * @package Laratrust
  */
 
-class PrionApi
+class Api
 {
     /**
      * Laravel application.

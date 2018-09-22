@@ -1,6 +1,6 @@
 <?php
 
-namespace PrionApi\Models;
+namespace Api\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

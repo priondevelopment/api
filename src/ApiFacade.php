@@ -1,6 +1,6 @@
 <?php
 
-namespace PrionApiauth;
+namespace Apiauth;
 
 /**
  * This file is part of Prion Development's Apiauth,
@@ -12,7 +12,7 @@ namespace PrionApiauth;
 
 use Illuminate\Support\Facades\Facade;
 
-class PrionApiFacade extends Facade
+class ApiFacade extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -21,6 +21,6 @@ class PrionApiFacade extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'prionapiauth';
+        return 'api';
     }
 }
