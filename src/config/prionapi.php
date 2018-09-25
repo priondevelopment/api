@@ -6,6 +6,22 @@ return [
 
     'version' => "1.0",
 
+
+    /**
+    |--------------------------------------------------------------------------
+    | The Base URL Path for the API
+    |--------------------------------------------------------------------------
+    |
+    | For example: https://api.prionplatform.com/[base path here]
+    |
+    |   A sample call will look like this:
+    |       https://api.prionplatform.com/api/version
+    |
+     */
+
+    'base_path' => 'api',
+
+
     /**
     |--------------------------------------------------------------------------
     | API Models

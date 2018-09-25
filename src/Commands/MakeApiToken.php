@@ -14,7 +14,7 @@ namespace Setting\Commands;
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Facades\Config;
 
-class MakeApiPermissionCommand extends GeneratorCommand
+class MakeApiToken extends GeneratorCommand
 {
     /**
      * The console command name.

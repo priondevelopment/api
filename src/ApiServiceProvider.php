@@ -41,6 +41,7 @@ class ApiServiceProvider extends ServiceProvider
     ];
 
     protected $routes = [
+        'api',
         'auth',
         'validate',
     ];
@@ -61,8 +62,9 @@ class ApiServiceProvider extends ServiceProvider
     public function boot()
     {
         // Register published configuration.
+        $app_path = app()->basePath('config/prionapi.php');
         $this->publishes([
-            __DIR__ . '/config/prionapi.php' => config_path('prionapi.php'),
+            __DIR__ . '/config/prionapi.php' => $app_path,
         ], 'prionapi');
     }
 
@@ -78,9 +80,9 @@ class ApiServiceProvider extends ServiceProvider
 
         $this->registerCommands();
 
-        $this->registerRoutes();
-
         $this->mergeConfig();
+
+        $this->registerRoutes();
     }
 
 
@@ -124,9 +126,9 @@ class ApiServiceProvider extends ServiceProvider
         foreach ($this->routes as $route) {
             $this->app->router->group([
                 'namespace' => 'Api\Http\Controllers',
-                'prefix' => 'api',
-            ], function ($router) {
-                require __DIR__.'/../routes/'. $route .'.php';
+                'prefix' => config('prionapi.base_path'),
+            ], function ($router) use ($route) {
+                require __DIR__.'/routes/'. $route .'.php';
             });
         }
     }
