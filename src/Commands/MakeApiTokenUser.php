@@ -1,6 +1,6 @@
 <?php
 
-namespace Setting\Commands;
+namespace Api\Commands;
 
 /**
  * This file is part of Setting,
@@ -11,10 +11,10 @@ namespace Setting\Commands;
  * @package Setting
  */
 
-use Illuminate\Console\GeneratorCommand;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 
-class MakeApiTokenUser extends GeneratorCommand
+class MakeApiTokenUser extends Command
 {
     /**
      * The console command name.
