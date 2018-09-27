@@ -31,6 +31,7 @@ class ApiServiceProvider extends ServiceProvider
         'Migration' => 'command.prionapi.migration',
         'Setup' => 'command.prionapi.setup',
         'Seeder' => 'command.prionapi.seeder',
+        'Config' => 'command.prionapi.config',
 
         // Models
         'ModelApiCredential' => 'command.prionapi.model-api-credential',
@@ -40,6 +41,12 @@ class ApiServiceProvider extends ServiceProvider
         'ModelApiTokenUser' => 'command.prionapi.model-api-token-user',
     ];
 
+
+    /**
+     * The Routes the Run
+     *
+     * @var array
+     */
     protected $routes = [
         'api',
         'auth',
@@ -141,6 +148,7 @@ class ApiServiceProvider extends ServiceProvider
      */
     protected function mergeConfig ()
     {
+        $this->app->configure('prionapi');
         $this->mergeConfigFrom(
             __DIR__.'/config/prionapi.php',
             'prionapi'
@@ -148,6 +156,10 @@ class ApiServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * Register the Migration Command
+     *
+     */
     protected function registerMigrationCommand()
     {
         $this->app->singleton('command.prionapi.migration', function () {
@@ -156,6 +168,10 @@ class ApiServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * Register the Seeder Command
+     *
+     */
     protected function registerSeederCommand()
     {
         $this->app->singleton('command.prionapi.seeder', function () {
@@ -164,6 +180,10 @@ class ApiServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * Register the Setup Command
+     *
+     */
     protected function registerSetupCommand()
     {
         $this->app->singleton('command.prionapi.setup', function () {
@@ -172,6 +192,23 @@ class ApiServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * Register the Config Command
+     *
+     */
+    protected function registerConfigCommand()
+    {
+        $command = $this->commands['Config'];
+        $this->app->singleton($command, function () {
+            return new \Api\Commands\ConfigCommand;
+        });
+    }
+
+
+    /**
+     * Register the ApiCredential Model
+     *
+     */
     protected function registerModelApiCredentialCommand()
     {
         $this->app->singleton('command.prionapi.model-api-credential', function () {
@@ -180,6 +217,10 @@ class ApiServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * Register the ApiCredentialPermission Model
+     *
+     */
     protected function registerModelApiCredentialPermissionCommand()
     {
         $this->app->singleton('command.prionapi.model-api-credential-permission', function () {
@@ -188,6 +229,10 @@ class ApiServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * Register the ApiPermission Model
+     *
+     */
     protected function registerModelApiPermissionCommand()
     {
         $this->app->singleton('command.prionapi.model-api-permission', function () {
@@ -196,6 +241,10 @@ class ApiServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * Register the ApiToken Model
+     *
+     */
     protected function registerModelApiTokenCommand()
     {
         $this->app->singleton('command.prionapi.model-api-token', function () {
@@ -204,6 +253,10 @@ class ApiServiceProvider extends ServiceProvider
     }
 
 
+    /**
+     * Register the ApiTokenUser Model
+     *
+     */
     protected function registerModelApiTokenUserCommand()
     {
         $this->app->singleton('command.prionapi.model-api-token-user', function () {

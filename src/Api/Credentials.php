@@ -10,7 +10,7 @@ namespace Api;
  * @package Laratrust
  */
 
-class Api
+class Credentials
 {
     /**
      * Laravel application.
@@ -32,13 +32,42 @@ class Api
 
 
     /**
-     * Check if Public Key Exists and Is Valid
+     * Pull the Credentials from a Public Key
      *
-     * @param null $public_key
-     * @return \Illuminate\Database\Eloquent\Model|null|static
-     * @throws Exceptions\ReturnException
      */
-    public function publicKey($public_key='')
+    public function get($public_key)
+    {
+
+    }
+
+
+    /**
+     * Does the Public Key Exist?
+     *
+     * @param $public_key
+     */
+    public function exist($public_key)
+    {
+
+    }
+
+
+    /**
+     * Does the Public Key Exist and is it active?
+     *
+     * @param $public_key
+     */
+    public function active($public_key)
+    {
+
+    }
+
+    /**
+     * Has the Public Key Expired?
+     *
+     * @param $public_key
+     */
+    public function expired($public_key)
     {
 
     }
