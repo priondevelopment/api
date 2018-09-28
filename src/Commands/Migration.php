@@ -36,7 +36,7 @@ class Migration extends Command
      */
     public function handle()
     {
-        $this->laravel->view->addNamespace('api\\api', substr(__DIR__, 0, -8).'views');
+        $this->laravel->view->addNamespace('prionapi', substr(__DIR__, 0, -8).'views');
         $this->line('');
         $this->info("Prion Development Api Migration Creation.");
         $this->line('');
@@ -85,7 +85,7 @@ class Migration extends Command
         $migrationPath = $this->getMigrationPath();
 
         $output = $this->laravel->view
-            ->make('prionapi:migration')
+            ->make('prionapi::migrations')
             ->with(['prionapi' => config('prionapi')])
             ->render();
 
@@ -107,7 +107,7 @@ class Migration extends Command
      */
     protected function generateMigrationMessage()
     {
-        $tables = Collection::make(config('prionapi.tables'))
+        $tables = collect(config('prionapi.tables'))
             ->sort();
 
         return "A migration that creates {$tables->implode(', ')} "

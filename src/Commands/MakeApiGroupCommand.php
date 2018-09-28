@@ -14,28 +14,28 @@ namespace Api\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 
-class MakeApiPermissionCommand extends Command
+class MakeApiGroupCommand extends Command
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'prionapi:api_permission';
+    protected $name = 'prionapi:api_group_command';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create Api Permission Model';
+    protected $description = 'Create Api Group Command Model';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Api Permission model';
+    protected $type = 'Api Group Command Model';
 
     /**
      * Get the stub file for the generator.
@@ -44,7 +44,7 @@ class MakeApiPermissionCommand extends Command
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/api_permission.stub';
+        return __DIR__.'/stubs/api_group.stub';
     }
 
     /**
@@ -54,7 +54,7 @@ class MakeApiPermissionCommand extends Command
      */
     protected function getNameInput()
     {
-        return config('api.models.api_permission', 'Credential');
+        return config('api.models.api_group', 'Group');
     }
 
     /**

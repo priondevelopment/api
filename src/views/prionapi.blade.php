@@ -1,8 +1,9 @@
-<?php echo '<?php'; ?>
+<?php echo "<?php"; ?>
 
 return [
 
     'use_cache' => true,
+    'cache_ttl' => 30, // in minutes
 
     'version' => "1.0",
 
@@ -34,27 +35,38 @@ return [
         /**
          * Api Credential model
          */
-        'api_credential' => 'App\Models\Api\Credential',
+        'api_credentials' => 'Api\Models\Api\Credential',
 
         /**
          * Api Credential model
          */
-        'api_credential_permission' => 'App\Models\Api\CredentialPermission',
+        'api_credential_permissions' => 'Api\Models\Api\CredentialPermission',
+
 
         /**
          * Api Permission model
          */
-        'api_permission' => 'App\Models\Api\Permission',
+        'api_groups' => 'Api\Models\Api\Group',
+
+        /**
+         * Api Permission model
+         */
+        'api_permissions' => 'Api\Models\Api\Permission',
+
+        /**
+         * Api Permission model
+         */
+        'api_permission_groups' => 'Api\Models\Api\PermissionGroup',
 
         /**
          * Api Token model
          */
-        'api_token' => 'App\Models\Api\Token',
+        'api_tokens' => 'Api\Models\Api\Token',
 
         /**
          * Api Token User model
          */
-        'api_token_user' => 'App\Models\Api\TokenUser',
+        'api_token_user' => 'Api\Models\Api\TokenUser',
 
     ],
 
@@ -91,6 +103,19 @@ return [
          * A list of permissions. These permissions are assignable to API Credentials
          */
         'api_permissions' => 'api_permissions',
+
+        /**
+         * API Permission Groups
+         *
+         * Organize Permissions into Group
+         */
+        'api_permission_groups' => 'api_permission_groups',
+
+        /**
+         * Groups for Permissions
+         *
+         */
+        'api_groups' => 'api_groups',
 
         /**
          * API Tokens

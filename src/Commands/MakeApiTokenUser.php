@@ -21,7 +21,7 @@ class MakeApiTokenUser extends Command
      *
      * @var string
      */
-    protected $name = 'api:api_token_user';
+    protected $name = 'prionapi:api_token_user';
 
     /**
      * The console command description.

@@ -21,7 +21,7 @@ class MakeApiCredentialPermissionCommand extends Command
      *
      * @var string
      */
-    protected $name = 'api:api_credential_permission';
+    protected $name = 'prionapi:api_credential_permission';
 
     /**
      * The console command description.

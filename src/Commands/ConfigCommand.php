@@ -22,7 +22,7 @@ class ConfigCommand extends Command
      *
      * @var string
      */
-    protected $name = 'api:config';
+    protected $name = 'prionapi:config';
 
     /**
      * The console command description.

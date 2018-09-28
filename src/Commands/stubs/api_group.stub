@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+use Api\Models;
+
+class Group extends Models\ApiGroup
+{
+    //
+}

@@ -36,7 +36,9 @@ class ApiServiceProvider extends ServiceProvider
         // Models
         'ModelApiCredential' => 'command.prionapi.model-api-credential',
         'ModelApiCredentialPermission' => 'command.prionapi.model-api-credential-permission',
+        'ModelApiGroup' => 'command.prionapi.model-api-group',
         'ModelApiPermission' => 'command.prionapi.model-api-permission',
+        'ModelApiPermissionGroup' => 'command.prionapi.model-api-permission-group',
         'ModelApiToken' => 'command.prionapi.model-api-token',
         'ModelApiTokenUser' => 'command.prionapi.model-api-token-user',
     ];
@@ -233,10 +235,36 @@ class ApiServiceProvider extends ServiceProvider
      * Register the ApiPermission Model
      *
      */
+    protected function registerModelApiGroupCommand()
+    {
+        $command = $this->commands['ModelApiGroup'];
+        $this->app->singleton($command, function () {
+            return new \Api\Commands\MakeApiGroupCommand;
+        });
+    }
+
+
+    /**
+     * Register the ApiPermission Model
+     *
+     */
     protected function registerModelApiPermissionCommand()
     {
         $this->app->singleton('command.prionapi.model-api-permission', function () {
             return new \Api\Commands\MakeApiPermissionCommand;
+        });
+    }
+
+
+    /**
+     * Register the ApiPermission Model
+     *
+     */
+    protected function registerModelApiPermissionGroupCommand()
+    {
+        $command = $this->commands['ModelApiPermissionGroup'];
+        $this->app->singleton($command, function () {
+            return new \Api\Commands\MakeApiPermissionGroupCommand;
         });
     }
 
