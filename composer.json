@@ -15,23 +15,22 @@
     ],
     "require": {
         "php": "^7.1.1",
-        "watson/rememberable": "^2.0"
     },
     "autoload": {
         "classmap": [
             "src"
         ],
         "psr-4": {
-            "PrionApi\\": "src/"
+            "Api\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "PrionApi\\Providers\\PrionApiServiceProvider"
+                "Api\\Providers\\ApiServiceProvider"
             ],
             "aliases": {
-                "PrionApi": "PrionApi\\PrionApiFacade"
+                "Api": "Api\\ApiFacade"
             }
         }
     },

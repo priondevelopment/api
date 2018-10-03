@@ -19,6 +19,18 @@ class Api
      */
     public $app;
 
+
+    /**
+     * Load Organized Classes
+     *
+     * @var array
+     */
+    protected $load = [
+        'Connect',
+        'Credentials',
+        'Token',
+    ];
+
     /**
      * Create a new confide instance.
      *
@@ -28,6 +40,7 @@ class Api
     public function __construct($app)
     {
         $this->app = $app;
+        $this->load();
     }
 
 
@@ -38,9 +51,11 @@ class Api
      * @return \Illuminate\Database\Eloquent\Model|null|static
      * @throws Exceptions\ReturnException
      */
-    public function publicKey($public_key='')
+    public function load()
     {
-
+        foreach ($this->load as $load) {
+            $this->{$load} = new Api\{$load};
+        }
     }
 
 }

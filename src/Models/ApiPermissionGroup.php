@@ -4,7 +4,7 @@ namespace Api\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ApiPermission extends Model
+class ApiPermissionGroup extends Model
 {
 
     /**

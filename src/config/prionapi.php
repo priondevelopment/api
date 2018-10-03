@@ -23,6 +23,13 @@ return [
     'base_path' => 'api',
 
 
+    'cache' => [
+        'connect' => "api_connect",
+        'credentials' => "api_credentials",
+        'token' => "api_token",
+    ],
+
+
     /**
     |--------------------------------------------------------------------------
     | API Models

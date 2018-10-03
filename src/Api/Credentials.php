@@ -10,9 +10,11 @@ namespace Api;
  * @package Laratrust
  */
 
+use Carbon\Carbon;
+
 use Api\Models;
 
-class Credentials
+class Credentials extends ApiAbstract implements Api\Contracts\ApiInterface
 {
     /**
      * Laravel application.
@@ -23,6 +25,8 @@ class Credentials
 
     protected $credentials;
 
+    protected $cacheTag;
+
     /**
      * Create a new confide instance.
      *
@@ -32,6 +36,8 @@ class Credentials
     public function __construct($app)
     {
         $this->app = $app;
+        $this->cacheTag = config('prionapi.cache.credentials');
+        $this->cache();
     }
 
 
@@ -41,7 +47,8 @@ class Credentials
      */
     public function get($public_key)
     {
-
+        $credentials = $this->pull($public_key);
+        return $credentials;
     }
 
 
@@ -52,18 +59,37 @@ class Credentials
      */
     public function exist($public_key)
     {
+        $credentials = $this->pull($public_key);
 
+        if ($credentials->public_key)
+            return true;
+
+        return false;
     }
 
 
     /**
-     * Does the Public Key Exist and is it active?
+     * Is our public key available?
+     *  1. Does it exist?
+     *  2. Is it active?
+     *  3. Is it expired?
      *
      * @param $public_key
      */
     public function active($public_key)
     {
+        if (!$this->exists($public_key))
+            return false;
 
+        $credentials = $this->pull($public_key);
+
+        if (!$credentials->active)
+            return false;
+
+        if ($this->expired($public_key))
+            return false;
+
+        return true;
     }
 
     /**
@@ -73,7 +99,17 @@ class Credentials
      */
     public function expired($public_key)
     {
+        if (!$this->exists($public_key))
+            return false;
 
+        $credentials = $this->pull($public_key);
+        $expired = Carbon::parse($credentials->expires_at);
+        $now = Carbon::now('UTC');
+
+        if ($expired->lt($now))
+            return true;
+
+        return false;
     }
 
 
@@ -83,7 +119,7 @@ class Credentials
      * @param $public_key
      * @return mixed
      */
-    private function getCredentials($public_key)
+    private function pull($public_key)
     {
         // Already Have Credentials
         if (is_object($public_key))
@@ -95,12 +131,12 @@ class Credentials
 
         // Never Cache Credentials
         if (!config('prionapi.use_cache'))
-            return $this->lookupCredentials($public_key);
+            return $this->lookup($public_key);
 
         $key = 'public_key:' . $public_key;
         $time = config('prionapi.cache_ttl');
         return $this->cache->remember($key, $time, function () use ($public_key) {
-            return $this->lookupCredentials($public_key);
+            return $this->lookup($public_key);
         });
     }
 
@@ -110,10 +146,10 @@ class Credentials
      *
      * @param $public_key
      */
-    private function lookupCredentials($public_key)
+    private function lookup($public_key)
     {
         $this->credentials = Models\ApiCredential::
-            select('id','active')
+            select('id','active', 'internal', 'expires_at','account_id', 'user_id')
             ->where('public_key', $public_key)
             ->orderBy('id', 'DESC')
             ->first();

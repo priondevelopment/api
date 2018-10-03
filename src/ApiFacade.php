@@ -1,6 +1,6 @@
 <?php
 
-namespace Apiauth;
+namespace Api;
 
 /**
  * This file is part of Prion Development's Apiauth,
