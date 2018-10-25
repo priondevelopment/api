@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Hash;
 
 use Carbon\Carbon;
 
-class PrionUsersSeeder extends Seeder
+class PrionApiSeeder extends Seeder
 {
     /**
     * Run the database seeds.
@@ -18,7 +18,7 @@ class PrionUsersSeeder extends Seeder
     {
         // Create Default Credentials
         $this->command->info('Create Default API Credentials');
-        $credential = PrionApi\Models\{{ $api_credentials }}::create([
+        $credential = {{ $models['api_credentials'] }}::create([
             'title' => "Default Credential",
             'description' => "The initial credential created by Prion API. DELETE THIS CREDENTIAL IN PRODUCTION. This credential has access to the full site.",
             'public_key' => "default_credential_public",
@@ -34,7 +34,7 @@ class PrionUsersSeeder extends Seeder
 
 
         // Create a Default Token
-        $token = PrionApi\Models\{{ $api_tokens }}::create([
+        $token = {{ $models['api_tokens'] }}::create([
             'token' => 'default_token',
             'ip' => '',
             'device_id' => '',

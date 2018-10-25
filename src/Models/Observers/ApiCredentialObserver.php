@@ -1,6 +1,6 @@
 <?php
 
-namespace Setting\Models\Observers;
+namespace Api\Models\Observers;
 
 /**
  * This file is part of Setting,
@@ -11,7 +11,7 @@ namespace Setting\Models\Observers;
  * @package Setting
  */
 
-use Setting\Models;
+use Api\Models;
 
 class ApiCredentialObserver
 {
@@ -22,12 +22,14 @@ class ApiCredentialObserver
      * @var
      */
     protected $cache;
-    protected $cacheTag = 'setting_cache';
+    protected $cacheTag = 'api_cache';
 
     public function __construct()
     {
         $this->cache = app()->make('cache')
             ->tags($this->cacheTag);
+
+        $this->brute = app()->make('brute');
     }
 
     /**
@@ -35,9 +37,9 @@ class ApiCredentialObserver
      *
      * @param Setting\Models\Settign $setting
      */
-    public function created(Setting\Models\Setting $setting)
+    public function created(Models\ApiCredential $credential)
     {
-        $this->log($setting->id);
+        $this->log($credential->id);
     }
 
 
@@ -46,11 +48,21 @@ class ApiCredentialObserver
      *
      * @param Setting\Models\Setting $setting
      */
-    public function updated(Setting\Models\Setting $setting)
+    public function updated(Models\ApiCredential $credential)
     {
-        $original = $setting->getOriginal();
-        $this->log($setting->id, $origial->value);
-        $this->clearCache($seetting->key);
+        $original = $credential->getOriginal();
+        $this->log($credential->id, $origial->value);
+        $this->clearCache($credential->key);
+    }
+
+
+    /**
+     * When Retriving a Model, Check if a Value Exists
+     *
+     * @param Models\ApiCredential $credential
+     */
+    public function retrieved(Models\ApiCredential $credential)
+    {
     }
 
 

@@ -33,7 +33,7 @@ class Setup extends Command
         'prionapi:api_credential_permission' => 'Creating Api Credential Permission Log model',
         'prionapi:api_permission' => 'Creating Api Permisson model',
         'prionapi:api_group' => 'Creating Api Permisson model',
-        'prionapi:api_group_permission' => 'Creating Api Permisson model',
+        'prionapi:api_permission_group' => 'Creating Api Permisson model',
         'prionapi:api_token' => 'Creating api token model',
         'prionapi:api_token_user' => 'Creating api token use model',
     ];

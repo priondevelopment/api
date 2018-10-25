@@ -19,6 +19,8 @@ Clear or reset your Laravel config cache.
 `php artisan config:clear`
 `php artisan config:cache`
 
+Register the the following in the command scheduler (app/Console/Kernel.php):
+`$schedule->command('prionapi:delete_token_expired')->everyMinute();`
 
 ## License
 

@@ -13,8 +13,9 @@ namespace Api\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Console\GeneratorCommand;
 
-class MakeApiGroupCommand extends Command
+class MakeApiGroupCommand extends GeneratorCommand
 {
     /**
      * The console command name.

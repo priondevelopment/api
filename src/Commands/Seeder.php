@@ -71,11 +71,11 @@ class Seeder extends Command
      */
     protected function createSeeder()
     {
-        $api_credentials = config('prionapi.models.api_credentials', 'PrionDevelopment\PrionApi');
+        $models = config('prionapi.models');
 
         $output = $this->laravel->view->make('prionapi::seeder')
             ->with(compact([
-                'api_credentials',
+                'models',
             ]))
             ->render();
 

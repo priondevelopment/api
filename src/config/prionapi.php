@@ -22,11 +22,32 @@ return [
 
     'base_path' => 'api',
 
+    'hash_repeat' => 2,
+
+    'auth_method' => 'double', // Single or Double
+
+    'credentials' => [
+        'expires_in' => 365*40, // Number of Years Credentials are Valid
+        'never_expires' => false,
+    ],
+    'token' => [
+        'expires_in' => 30, // Number of Days Token is Valid
+        'never_expires' => false,
+    ],
+    'refresh' => [
+        'expires_in' => 365, // Number of Days Refresh is Valid
+        'never_expires' => true,
+    ],
 
     'cache' => [
         'connect' => "api_connect",
         'credentials' => "api_credentials",
         'token' => "api_token",
+    ],
+
+
+    'middleware' => [
+        'register' => true,
     ],
 
 
@@ -42,38 +63,38 @@ return [
         /**
          * Api Credential model
          */
-        'api_credentials' => 'Api\Models\Api\Credential',
+        'api_credentials' => 'App\Models\Api\Credential',
 
         /**
          * Api Credential model
          */
-        'api_credential_permissions' => 'Api\Models\Api\CredentialPermission',
+        'api_credential_permissions' => 'App\Models\Api\CredentialPermission',
 
 
         /**
          * Api Permission model
          */
-        'api_groups' => 'Api\Models\Api\Group',
+        'api_groups' => 'App\Models\Api\Group',
 
         /**
          * Api Permission model
          */
-        'api_permissions' => 'Api\Models\Api\Permission',
+        'api_permissions' => 'App\Models\Api\Permission',
 
         /**
          * Api Permission model
          */
-        'api_permission_groups' => 'Api\Models\Api\PermissionGroup',
+        'api_permission_groups' => 'App\Models\Api\PermissionGroup',
 
         /**
          * Api Token model
          */
-        'api_tokens' => 'Api\Models\Api\Token',
+        'api_tokens' => 'App\Models\Api\Token',
 
         /**
          * Api Token User model
          */
-        'api_token_user' => 'Api\Models\Api\TokenUser',
+        'api_token_user' => 'App\Models\Api\TokenUser',
 
     ],
 

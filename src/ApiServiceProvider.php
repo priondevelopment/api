@@ -12,6 +12,7 @@ namespace Api;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Console\Scheduling\Schedule;
 
 class ApiServiceProvider extends ServiceProvider
 {
@@ -41,6 +42,9 @@ class ApiServiceProvider extends ServiceProvider
         'ModelApiPermissionGroup' => 'command.prionapi.model-api-permission-group',
         'ModelApiToken' => 'command.prionapi.model-api-token',
         'ModelApiTokenUser' => 'command.prionapi.model-api-token-user',
+
+        // General Maintenance
+        'TokenDeleteExpired' => 'command.prionapi.token-delete-expired',
     ];
 
 
@@ -52,7 +56,6 @@ class ApiServiceProvider extends ServiceProvider
     protected $routes = [
         'api',
         'auth',
-        'validate',
     ];
 
     /**
@@ -61,6 +64,11 @@ class ApiServiceProvider extends ServiceProvider
      * @var array
      */
     protected $middlewares = [
+        'admin' => \Api\Http\Middleware\Admin::class,
+        'external' => \Api\Http\Middleware\External::class,
+        'external_user' => \Api\Http\Middleware\ExternalUser::class,
+        'internal' => \Api\Http\Middleware\Internal::class,
+        'internal_user' => \Api\Http\Middleware\InternalUser::class,
     ];
 
     /**
@@ -75,6 +83,8 @@ class ApiServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/prionapi.php' => $app_path,
         ], 'prionapi');
+
+        $this->registerMiddlewares();
     }
 
 
@@ -96,6 +106,30 @@ class ApiServiceProvider extends ServiceProvider
 
 
     /**
+     * Register the middlewares automatically.
+     *
+     * @return void
+     */
+    protected function registerMiddlewares()
+    {
+        if (!$this->app['config']->get('prionapi.middleware.register')) {
+            return;
+        }
+        $router = $this->app['router'];
+        if (method_exists($router, 'middleware')) {
+            $registerMethod = 'middleware';
+        } elseif (method_exists($router, 'aliasMiddleware')) {
+            $registerMethod = 'aliasMiddleware';
+        } else {
+            return;
+        }
+        foreach ($this->middlewares as $key => $class) {
+            $router->$registerMethod($key, $class);
+        }
+    }
+
+
+        /**
      * Register PrionUsers Package in Laravel/Lumen
      *
      */
@@ -116,6 +150,10 @@ class ApiServiceProvider extends ServiceProvider
      */
     protected function registerCommands ()
     {
+        if (!$this->app->runningInConsole()) {
+            return false;
+        }
+
         foreach (array_keys($this->commands) as $command) {
             $method = "register{$command}Command";
 
@@ -213,8 +251,8 @@ class ApiServiceProvider extends ServiceProvider
      */
     protected function registerModelApiCredentialCommand()
     {
-        $this->app->singleton('command.prionapi.model-api-credential', function () {
-            return new \Api\Commands\MakeApiCredentialCommand;
+        $this->app->singleton('command.prionapi.model-api-credential', function ($app) {
+            return new \Api\Commands\MakeApiCredentialCommand($app['files']);
         });
     }
 
@@ -225,8 +263,8 @@ class ApiServiceProvider extends ServiceProvider
      */
     protected function registerModelApiCredentialPermissionCommand()
     {
-        $this->app->singleton('command.prionapi.model-api-credential-permission', function () {
-            return new \Api\Commands\MakeApiCredentialPermissionCommand;
+        $this->app->singleton('command.prionapi.model-api-credential-permission', function ($app) {
+            return new \Api\Commands\MakeApiCredentialPermissionCommand($app['files']);
         });
     }
 
@@ -238,8 +276,8 @@ class ApiServiceProvider extends ServiceProvider
     protected function registerModelApiGroupCommand()
     {
         $command = $this->commands['ModelApiGroup'];
-        $this->app->singleton($command, function () {
-            return new \Api\Commands\MakeApiGroupCommand;
+        $this->app->singleton($command, function ($app) {
+            return new \Api\Commands\MakeApiGroupCommand($app['files']);
         });
     }
 
@@ -250,8 +288,8 @@ class ApiServiceProvider extends ServiceProvider
      */
     protected function registerModelApiPermissionCommand()
     {
-        $this->app->singleton('command.prionapi.model-api-permission', function () {
-            return new \Api\Commands\MakeApiPermissionCommand;
+        $this->app->singleton('command.prionapi.model-api-permission', function ($app) {
+            return new \Api\Commands\MakeApiPermissionCommand($app['files']);
         });
     }
 
@@ -263,8 +301,8 @@ class ApiServiceProvider extends ServiceProvider
     protected function registerModelApiPermissionGroupCommand()
     {
         $command = $this->commands['ModelApiPermissionGroup'];
-        $this->app->singleton($command, function () {
-            return new \Api\Commands\MakeApiPermissionGroupCommand;
+        $this->app->singleton($command, function ($app) {
+            return new \Api\Commands\MakeApiPermissionGroupCommand($app['files']);
         });
     }
 
@@ -275,8 +313,9 @@ class ApiServiceProvider extends ServiceProvider
      */
     protected function registerModelApiTokenCommand()
     {
-        $this->app->singleton('command.prionapi.model-api-token', function () {
-            return new \Api\Commands\MakeApiToken;
+        $command = $this->commands['ModelApiToken'];
+        $this->app->singleton($command, function ($app) {
+            return new \Api\Commands\MakeApiToken($app['files']);
         });
     }
 
@@ -287,8 +326,17 @@ class ApiServiceProvider extends ServiceProvider
      */
     protected function registerModelApiTokenUserCommand()
     {
-        $this->app->singleton('command.prionapi.model-api-token-user', function () {
-            return new \Api\Commands\MakeApiTokenUser;
+        $this->app->singleton('command.prionapi.model-api-token-user', function ($app) {
+            return new \Api\Commands\MakeApiTokenUser($app['files']);
+        });
+    }
+
+
+    public function registerTokenDeleteExpiredCommand()
+    {
+        $command = $this->commands['TokenDeleteExpired'];
+        $this->app->singleton($command, function ($app) {
+            return new \Api\Commands\Token\DeleteExpired($app['files']);
         });
     }
 
@@ -302,4 +350,5 @@ class ApiServiceProvider extends ServiceProvider
     {
         return array_values($this->commands);
     }
+
 }

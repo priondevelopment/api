@@ -14,3 +14,7 @@
 $router->get('version', function () use ($router) {
     return config('prionapi.version');
 });
+
+$router->group(['prefix' => 'token'], function () use ($router) {
+    $router->get('{token}', 'TokenController@getStatus');
+});
