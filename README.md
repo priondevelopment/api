@@ -17,11 +17,15 @@ PrionDevelopment\Providers\ApiProviderService::class
 
 ## Automated Setup
 Run the following command for automated setup.
-`php artisan prionapi:setup`
+```
+php artisan prionapi:setup
+```
 
 Clear or reset your Laravel config cache.
-`php artisan config:clear`
-`php artisan config:cache`
+```
+php artisan config:clear
+php artisan config:cache
+```
 
 Register the the following in the command scheduler (app/Console/Kernel.php):<br>
 ```
