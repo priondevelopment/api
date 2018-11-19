@@ -53,50 +53,40 @@ return [
 
     /**
     |--------------------------------------------------------------------------
-    | API Models
+    | Default Seeded Values
+    |--------------------------------------------------------------------------
+    |
+    | These values are seeded by default.
+    |
+    */
+    'default' => [
+        'credentials' => [
+            'public_key' => '1234',
+            'private_key' => '1234',
+        ]
+    ],
+
+
+    /**
+    |--------------------------------------------------------------------------
+    | PrionApi Models
     |--------------------------------------------------------------------------
     |
     | These are the models used by Prion Settings
     |
     */
     'models' => [
-        /**
-         * Api Credential model
-         */
-        'api_credentials' => 'App\Models\Api\Credential',
+        'api_credentials' => Api\Models\Api\Credential::class,
+        'api_credential_permissions' => Api\Models\Api\CredentialPermission::class,
+        'api_credential_permission_groups' => Api\Models\Api\CredentialPermissionGroup::class,
+        'api_tokens' => Api\Models\Api\Token::class,
 
-        /**
-         * Api Credential model
-         */
-        'api_credential_permissions' => 'App\Models\Api\CredentialPermission',
-
-
-        /**
-         * Api Permission model
-         */
-        'api_groups' => 'App\Models\Api\Group',
-
-        /**
-         * Api Permission model
-         */
-        'api_permissions' => 'App\Models\Api\Permission',
-
-        /**
-         * Api Permission model
-         */
-        'api_permission_groups' => 'App\Models\Api\PermissionGroup',
-
-        /**
-         * Api Token model
-         */
-        'api_tokens' => 'App\Models\Api\Token',
-
-        /**
-         * Api Token User model
-         */
-        'api_token_user' => 'App\Models\Api\TokenUser',
-
+        'permissions' => Api\Models\Permission::class,
+        'permission_groups' => Api\Models\PermissionGroup::class,
+        'permission_group_permissions' => Api\Models\PermissionGroupPermission::class,
     ],
+
+
 
     /**
     |--------------------------------------------------------------------------
@@ -109,57 +99,13 @@ return [
     */
 
     'tables' => [
-        /**
-         * Api Credentials Table
-         *
-         * API Credentials are used initially to validate a connection with the API.
-         *
-         */
         'api_credentials' => 'api_credentials',
-
-        /**
-         * API Credential Permissions
-         *
-         * API Credentials can be assigned permissions. These permissions limit the credential's
-         * access to the API.
-         */
         'api_credential_permissions' => 'api_credential_permissions',
-
-        /**
-         * API Permissions
-         *
-         * A list of permissions. These permissions are assignable to API Credentials
-         */
-        'api_permissions' => 'api_permissions',
-
-        /**
-         * API Permission Groups
-         *
-         * Organize Permissions into Group
-         */
-        'api_permission_groups' => 'api_permission_groups',
-
-        /**
-         * Groups for Permissions
-         *
-         */
-        'api_groups' => 'api_groups',
-
-        /**
-         * API Tokens
-         *
-         * API Tokens are Valid Connections to the API.
-         */
+        'api_credential_permission_groups' => 'api_credential_permission_groups',
         'api_tokens' => 'api_tokens',
 
-        /**
-         * Users Associated to a Token
-         *
-         * A user can "log into" an API token. Once a user is logged into a token, the token has access
-         * to everything the user has access. When a user logs out, the token is destroyed and the app
-         * is required to create a new token.
-         */
-        'api_token_user' => 'api_token_user',
-
+        'permissions' => 'permissions',
+        'permission_groups' => 'permission_groups',
+        'permission_group_permissions' => 'permission_group_permissions',
     ],
 ];

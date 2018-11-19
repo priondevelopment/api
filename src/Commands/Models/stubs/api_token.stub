@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+use Api\Models\Api;
+
+class Token extends Api\Token
+{
+    //
+}

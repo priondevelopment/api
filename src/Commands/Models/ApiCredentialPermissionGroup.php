@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Commands;
+namespace Api\Commands\Models;
 
 /**
  * This file is part of Setting,
@@ -15,28 +15,28 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\GeneratorCommand;
 
-class MakeApiGroupCommand extends GeneratorCommand
+class ApiCredentialPermissionGroup extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'prionapi:api_group_command';
+    protected $name = 'prionapi:model_api_credential_permission_group';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create Api Group Command Model';
+    protected $description = 'Create Api Credential Permission Model';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Api Group Command Model';
+    protected $type = 'Api Credential Permission model';
 
     /**
      * Get the stub file for the generator.
@@ -45,7 +45,7 @@ class MakeApiGroupCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/api_group.stub';
+        return __DIR__.'/stubs/api_credential_permission.stub';
     }
 
     /**
@@ -55,7 +55,7 @@ class MakeApiGroupCommand extends GeneratorCommand
      */
     protected function getNameInput()
     {
-        return config('api.models.api_group', 'Group');
+        return config('api.models.api_credential_permission', "CredentialPermissionGroup");
     }
 
     /**

@@ -43,7 +43,6 @@ class AuthController extends Controller
         $token = $this->TokenService->createInitial($credentials);
         $this->data['auth_token'] = $token->token;
         return response()->json($this->data);
-
     }
 
 

@@ -9,14 +9,18 @@
 |   setup by the user and the API credentials used are:
 |    - internal != 1
 |
+|   APIs with Only External Access are available from Prion Platform
+|   clients and from external user products. All external
+|   requests need to be rate limited.
+|
 */
 
-namespace App\Http\Middleware\Access;
+namespace Api\Http\Middleware;
 
 use Closure;
 
 use Api\Models;
-use Api\Services;
+use Exception;
 
 class External
 {
@@ -26,7 +30,6 @@ class External
     public function __construct()
     {
         $this->error = app()->make('error');
-        $this->TokenService = new Services\TokenService;
     }
 
     /**
@@ -38,10 +41,11 @@ class External
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, $permissions)
     {
 
-        $this->token();
+        $token = $this->token();
+        $this->permissions($token, $permissions);
 
         return $next($request)
             ->header('Access-Control-Allow-Origin', '*')
@@ -57,9 +61,37 @@ class External
      */
     public function token()
     {
-        $this->error->required(['token']);
-        $this->TokenService->get();
+        $this->error->required(['token','hash']);
+        $input = app('input')->only(['token','hash']);
 
-        return true;
+        try {
+            $token = Models\Api\Token::
+                where('token', $input['token'])
+                ->findOrFail();
+        } catch (Exception $e) {
+            $this->error->code('2010');
+        }
+        $token->compareHash($input['hash']);
+
+        return $token;
+    }
+
+
+    /**
+     * Check if Permissions are Valid
+     *
+     * @param $token
+     */
+    public function permissions($token, $permissions)
+    {
+        $credentialPermission = $token->credential->permission_slugs;
+        $permissions = collect($permissions);
+        $compare = $credentialPermission->intersect($permissions);
+
+        if ($compare->count()) {
+            return true;
+        }
+
+        $this->error->code('2020');
     }
 }

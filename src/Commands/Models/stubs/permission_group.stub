@@ -4,7 +4,7 @@ namespace DummyNamespace;
 
 use Api\Models;
 
-class PermissionGroup extends Models\ApiPermissionGroup
+class PermissionGroup extends Api\Models\PermissionGroup
 {
     //
 }

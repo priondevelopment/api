@@ -37,11 +37,12 @@ class ApiServiceProvider extends ServiceProvider
         // Models
         'ModelApiCredential' => 'command.prionapi.model-api-credential',
         'ModelApiCredentialPermission' => 'command.prionapi.model-api-credential-permission',
-        'ModelApiGroup' => 'command.prionapi.model-api-group',
-        'ModelApiPermission' => 'command.prionapi.model-api-permission',
-        'ModelApiPermissionGroup' => 'command.prionapi.model-api-permission-group',
+        'ModelApiCredentialPermissionGroup' => 'command.prionapi.model-api-credential-permission-gropu',
         'ModelApiToken' => 'command.prionapi.model-api-token',
-        'ModelApiTokenUser' => 'command.prionapi.model-api-token-user',
+
+        'ModelPermission' => 'command.prionapi.model-permission',
+        'ModelPermissionGroup' => 'command.prionapi.model-permission-group',
+        'ModelPermissionGroupPermission' => 'command.prionapi.model-permission-group-permission',
 
         // General Maintenance
         'TokenDeleteExpired' => 'command.prionapi.token-delete-expired',
@@ -64,11 +65,8 @@ class ApiServiceProvider extends ServiceProvider
      * @var array
      */
     protected $middlewares = [
-        'admin' => \Api\Http\Middleware\Admin::class,
-        'external' => \Api\Http\Middleware\External::class,
-        'external_user' => \Api\Http\Middleware\ExternalUser::class,
-        'internal' => \Api\Http\Middleware\Internal::class,
-        'internal_user' => \Api\Http\Middleware\InternalUser::class,
+        'api_external' => \Api\Http\Middleware\External::class,
+        'api_internal' => \Api\Http\Middleware\Internal::class,
     ];
 
     /**
@@ -207,6 +205,17 @@ class ApiServiceProvider extends ServiceProvider
         });
     }
 
+    /**
+     * Register the Config Command
+     *
+     */
+    protected function registerConfigCommand()
+    {
+        $command = $this->commands['Config'];
+        $this->app->singleton($command, function () {
+            return new \Api\Commands\ConfigCommand;
+        });
+    }
 
     /**
      * Register the Seeder Command
@@ -233,17 +242,15 @@ class ApiServiceProvider extends ServiceProvider
 
 
     /**
-     * Register the Config Command
-     *
+     * Delete Expired Tokens and Credentials
      */
-    protected function registerConfigCommand()
+    public function registerTokenDeleteExpiredCommand()
     {
-        $command = $this->commands['Config'];
-        $this->app->singleton($command, function () {
-            return new \Api\Commands\ConfigCommand;
+        $command = $this->commands['TokenDeleteExpired'];
+        $this->app->singleton($command, function ($app) {
+            return new \Api\Commands\Token\DeleteExpired($app['files']);
         });
     }
-
 
     /**
      * Register the ApiCredential Model
@@ -252,7 +259,7 @@ class ApiServiceProvider extends ServiceProvider
     protected function registerModelApiCredentialCommand()
     {
         $this->app->singleton('command.prionapi.model-api-credential', function ($app) {
-            return new \Api\Commands\MakeApiCredentialCommand($app['files']);
+            return new \Api\Commands\Models\ApiCredential($app['files']);
         });
     }
 
@@ -264,7 +271,7 @@ class ApiServiceProvider extends ServiceProvider
     protected function registerModelApiCredentialPermissionCommand()
     {
         $this->app->singleton('command.prionapi.model-api-credential-permission', function ($app) {
-            return new \Api\Commands\MakeApiCredentialPermissionCommand($app['files']);
+            return new \Api\Commands\Models\ApiCredentialPermission($app['files']);
         });
     }
 
@@ -273,70 +280,54 @@ class ApiServiceProvider extends ServiceProvider
      * Register the ApiPermission Model
      *
      */
-    protected function registerModelApiGroupCommand()
+    protected function registerModelApiCredentialPermissionGroupCommand()
     {
-        $command = $this->commands['ModelApiGroup'];
+        $command = $this->commands['ModelApiCredentialPermissionGroup'];
         $this->app->singleton($command, function ($app) {
-            return new \Api\Commands\MakeApiGroupCommand($app['files']);
+            return new \Api\Commands\Models\ApiCredentialPermissionGroup($app['files']);
         });
     }
 
 
     /**
      * Register the ApiPermission Model
-     *
-     */
-    protected function registerModelApiPermissionCommand()
-    {
-        $this->app->singleton('command.prionapi.model-api-permission', function ($app) {
-            return new \Api\Commands\MakeApiPermissionCommand($app['files']);
-        });
-    }
-
-
-    /**
-     * Register the ApiPermission Model
-     *
-     */
-    protected function registerModelApiPermissionGroupCommand()
-    {
-        $command = $this->commands['ModelApiPermissionGroup'];
-        $this->app->singleton($command, function ($app) {
-            return new \Api\Commands\MakeApiPermissionGroupCommand($app['files']);
-        });
-    }
-
-
-    /**
-     * Register the ApiToken Model
      *
      */
     protected function registerModelApiTokenCommand()
     {
-        $command = $this->commands['ModelApiToken'];
-        $this->app->singleton($command, function ($app) {
-            return new \Api\Commands\MakeApiToken($app['files']);
+        $this->app->singleton('command.prionapi.model-api-token', function ($app) {
+            return new \Api\Commands\Models\ApiToken($app['files']);
         });
     }
 
 
     /**
-     * Register the ApiTokenUser Model
+     * Register the ApiPermission Model
      *
      */
-    protected function registerModelApiTokenUserCommand()
+    protected function registerModelPermissionCommand()
     {
-        $this->app->singleton('command.prionapi.model-api-token-user', function ($app) {
-            return new \Api\Commands\MakeApiTokenUser($app['files']);
+        $command = $this->commands['ModelPermission'];
+        $this->app->singleton($command, function ($app) {
+            return new \Api\Commands\Models\Permission($app['files']);
         });
     }
 
 
-    public function registerTokenDeleteExpiredCommand()
+    protected function registerModelPermissionGroupCommand()
     {
-        $command = $this->commands['TokenDeleteExpired'];
+        $command = $this->commands['ModelPermissionGroup'];
         $this->app->singleton($command, function ($app) {
-            return new \Api\Commands\Token\DeleteExpired($app['files']);
+            return new \Api\Commands\Models\PermissionGroup($app['files']);
+        });
+    }
+
+
+    protected function registerModelPermissionGroupPermissionCommand()
+    {
+        $command = $this->commands['ModelPermissionGroupPermission'];
+        $this->app->singleton($command, function ($app) {
+            return new \Api\Commands\Models\PermissionGroupPermission($app['files']);
         });
     }
 

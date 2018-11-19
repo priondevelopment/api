@@ -15,7 +15,25 @@ use Api\Services;
 trait ApiTraits
 {
 
-    protected $brutePrefix = 'api';
+    /**
+     * Cache Keys
+     *
+     * @var string
+     */
+    protected $cacheTag = 'api';
+    protected $cacheCredential = 'credential';
+    protected $cacheToken = 'token';
+    protected $cacheTokenRefresh = 'token_refresh';
+    protected $cacheTokenInitial = 'token_once';
+
+    protected $cache;
+
+    /**
+     * Brute Cache Keys
+     *
+     * @var string
+     */
+    protected $brutePrefix = 'bruteApi';
 
     protected $brutePublicKey = "public_key";
 
@@ -23,9 +41,15 @@ trait ApiTraits
     protected $bruteTokenRefresh = "token_refresh";
     protected $bruteOneTimeToken = "token_once";
 
+    /**
+     * Database Token Keys
+     *
+     * @var string
+     */
     protected $TOKEN_INITIAL = "initial";
     protected $TOKEN = "token";
     protected $TOKEN_REFRESH = "refresh";
+
 
     /**
      *  Load Libraries/Helpers
@@ -36,6 +60,9 @@ trait ApiTraits
         $this->error = app()->make('error');
         $this->brute = app()->make('brute');
         $this->input = app('request')->all();
+
+        $this->cache = app()->make('cache')
+            ->tags($this->cacheTag);
     }
 
     /**
@@ -49,6 +76,29 @@ trait ApiTraits
         $this->save();
 
         return $this;
+    }
+
+
+    /**
+     * Determine the Cache Key
+     *
+     * The type is the same type as in the database (api_tokens.type)
+     *
+     * @param $type
+     * @return string
+     */
+    public function cacheKey($type, $token='')
+    {
+        $type = strtolower($type);
+
+        switch ($type) {
+            case 'token':
+                return $this->cacheToken . ":" . $token;
+            case 'refresh':
+                return $this->cacheTokenRefresh . ":" . $token;
+            case 'initial':
+                return $this->cacheTokenInitial . ":" . $token;
+        }
     }
 
 }

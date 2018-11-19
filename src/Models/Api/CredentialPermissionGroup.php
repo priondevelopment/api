@@ -1,10 +1,11 @@
 <?php
 
-namespace Api\Models;
+namespace Api\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
+use Api\Models\Scopes;
 
-class ApiPermission extends Model
+class CredentialPermissionGroup extends Model
 {
 
     /**
@@ -23,7 +24,18 @@ class ApiPermission extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('prionapi.tables.api_permission');
+        $this->table = config('prionapi.tables.api_credential_permission_groups');
     }
+
+    /**
+     * The "boot" method of the model
+     *
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new Scopes\NotExpiredScope);
+    }
+
 
 }

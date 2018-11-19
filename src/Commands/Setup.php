@@ -28,14 +28,16 @@ class Setup extends Command
      * @var array
      */
     protected $calls = [
-        'prionapi:migration' => 'Creating migration',
-        'prionapi:api_credential' => 'Creating Api Credential model',
-        'prionapi:api_credential_permission' => 'Creating Api Credential Permission Log model',
-        'prionapi:api_permission' => 'Creating Api Permisson model',
-        'prionapi:api_group' => 'Creating Api Permisson model',
-        'prionapi:api_permission_group' => 'Creating Api Permisson model',
-        'prionapi:api_token' => 'Creating api token model',
-        'prionapi:api_token_user' => 'Creating api token use model',
+        'prionapi:migration' => 'Creating migrations for PrionApi',
+        'prionapi:model_api_credential' => 'Creating Api Credential model',
+        'prionapi:model_api_credential_permission' => 'Creating Api Credential Permission',
+        'prionapi:model_api_credential_permission_group' => 'Creating Api Credential Permission Group model',
+        'prionapi:model_api_token' => 'Creating Api Token model',
+        'prionapi:model_permission' => 'Creating Permissions model',
+        'prionapi:model_permission_group' => 'Creating Permission Group model',
+        'prionapi:model_permission_group_permission' => 'Creating Permission Group Permissions model',
+
+        'prionapi:config' => "Creating PrionApi Config File",
     ];
 
     /**

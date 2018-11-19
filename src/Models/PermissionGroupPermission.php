@@ -4,7 +4,7 @@ namespace Api\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ApiPermissionGroup extends Model
+class PermissionGroupPermission extends Model
 {
 
     /**
@@ -23,7 +23,7 @@ class ApiPermissionGroup extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('prionapi.tables.api_permission_groups');
+        $this->table = config('prionapi.tables.permission_group_permissions');
     }
 
 }

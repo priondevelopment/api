@@ -21,8 +21,8 @@ class PrionApiSeeder extends Seeder
         $credential = {{ $models['api_credentials'] }}::create([
             'title' => "Default Credential",
             'description' => "The initial credential created by Prion API. DELETE THIS CREDENTIAL IN PRODUCTION. This credential has access to the full site.",
-            'public_key' => "default_credential_public",
-            'private_key' => "default_credential_private",
+            'public_key' => "{{ $defaults['credentials']['public_key'] }}",
+            'private_key' => "{{ $defaults['credentials']['private_key'] }}",
             'internal' => 1,
             'account_id' => 0, // Account who Created Credential (Prion Users)
             'user_id' => 0, // User who created credential (Prion Users)

@@ -18,25 +18,18 @@
 namespace Api\Http\Middleware;
 
 use Closure;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 use Api\Models;
-use Api\Services;
 use Exception;
 
-class Internal
+class External
 {
 
     private $error;
 
-    public function __construct(Services\BlockService $BlockService)
+    public function __construct()
     {
         $this->error = app()->make('error');
-        $this->input = app('input')->only([
-            'token',
-        ]);
-
-        $this->BlockService = $BlockService;
     }
 
     /**
@@ -48,11 +41,15 @@ class Internal
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next, $permissions)
     {
 
         $token = $this->token();
-        $this->internal($token);
+        if (!$token->credentials->internal) {
+            $this->error->code('2021');
+        }
+
+        $this->permissions($token, $permissions);
 
         return $next($request)
             ->header('Access-Control-Allow-Origin', '*')
@@ -68,25 +65,37 @@ class Internal
      */
     public function token()
     {
-        $this->error->required([
-            'token',
-        ]);
+        $this->error->required(['token','hash']);
+        $input = app('input')->only(['token','hash']);
 
-        $token = $this->BlockService->token($token);
+        try {
+            $token = Models\Api\Token::
+                where('token', $input['token'])
+                ->findOrFail();
+        } catch (Exception $e) {
+            $this->error->code('2010');
+        }
+        $token->compareHash($input['hash']);
+
         return $token;
     }
 
 
     /**
-     * Internal Credential Check
+     * Check if Permissions are Valid
      *
      * @param $token
      */
-    public function internal($token)
+    public function permissions($token, $permissions)
     {
-        if (!$token->credentials->internal) {
-            $this->error->code('2012');
-        }
-    }
+        $credentialPermission = $token->credential->permission_slugs;
+        $permissions = collect($permissions);
+        $compare = $credentialPermission->intersect($permissions);
 
+        if ($compare->count()) {
+            return true;
+        }
+
+        $this->error->code('2020');
+    }
 }

@@ -72,10 +72,12 @@ class Seeder extends Command
     protected function createSeeder()
     {
         $models = config('prionapi.models');
+        $defaults = config('prionapi.default');
 
         $output = $this->laravel->view->make('prionapi::seeder')
             ->with(compact([
                 'models',
+                'defaults',
             ]))
             ->render();
 

@@ -1,12 +1,13 @@
 <?php
 
-namespace Api\Models;
+namespace Api\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
 
 use Api\Traits;
+use Api\Models\Scopes;
 
-class ApiToken extends Model
+class Token extends Model
 {
 
     use Traits\ApiTraits;
@@ -27,7 +28,7 @@ class ApiToken extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('prionapi.tables.api_token');
+        $this->table = config('prionapi.tables.api_tokens');
     }
 
 
@@ -40,6 +41,8 @@ class ApiToken extends Model
         parent::boot();
         static::addGlobalScope(new Scopes\ActiveScope);
         static::addGlobalScope(new Scopes\NotExpiredScope);
+
+        Token::observe(Observers\ApiTokenObserver::class);
     }
 
 
@@ -52,6 +55,17 @@ class ApiToken extends Model
     {
         return $this
             ->belongsTo('\Api\Models\ApiCredential','api_credential_id');
+    }
+
+
+    /**
+     * Return the Token Credentials (Alias of credentials)
+     *
+     * @return mixed
+     */
+    public function credential()
+    {
+        return $this->credentials();
     }
 
 

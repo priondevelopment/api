@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Commands;
+namespace Api\Commands\Models;
 
 /**
  * This file is part of Setting,
@@ -15,28 +15,28 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\GeneratorCommand;
 
-class MakeApiCredentialPermissionCommand extends GeneratorCommand
+class ApiToken extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'prionapi:api_credential_permission';
+    protected $name = 'prionapi:model_api_token';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create Api Credential Permission Model';
+    protected $description = 'Create Api Token Model';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Api Credential Permission model';
+    protected $type = 'Api Token Model';
 
     /**
      * Get the stub file for the generator.
@@ -45,7 +45,7 @@ class MakeApiCredentialPermissionCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/api_credential_permission.stub';
+        return __DIR__.'/stubs/api_token.stub';
     }
 
     /**
@@ -55,7 +55,7 @@ class MakeApiCredentialPermissionCommand extends GeneratorCommand
      */
     protected function getNameInput()
     {
-        return config('api.models.api_credential_permission', 'Credential');
+        return config('api.models.api_token', "Token");
     }
 
     /**

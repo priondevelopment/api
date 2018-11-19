@@ -23,16 +23,59 @@ class PublicKeyService
         $brute = $this->blocked($public_key);
 
         try {
-            $credentials = Models\ApiCredential::
-                where('public_key', $public_key)
-                ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $brute->attempt($public_key);
             $this->error->code('2001');
         }
 
-        return $credentials;
+        return $this->lookupCredentialsQuery($public_key);
     }
+
+    /**
+     * Lookup a Token in the Database. If cache is active, check the cache.
+     *
+     * @param $token
+     * @param $type
+     * @return mixed
+     */
+    protected function lookupToken($public_key)
+    {
+        if (!config('prionapi.use_cache')) {
+            return $this->lookupCredentialsQuery($public_key);
+        }
+
+        $cacheKey = $this->cacheCredential . ":" . $public_key;
+        $cacheTtl = config('prionapi.cache_ttl');
+        $credential = $this->cache->remember($cacheKey, $cacheTtl, function ($public_key) {
+            return $this->lookupCredentialsQuery($public_key);
+        });
+
+        $expires = Carbon::parse($credential->expires_at, 'UTC');
+        $now = Carbon::now('UTC');
+        if (!$credential->active) {
+            $this->error->code('2011');
+        }
+        elseif ($expires->lte($now)) {
+            $this->error->code('2011');
+        }
+
+        return $token;
+    }
+
+    /**
+     * Query to Look Token
+     *
+     * @param $token
+     * @param $type
+     * @return mixed
+     */
+    protected function lookupCredentialsQuery($public_key)
+    {
+        return Models\Api\Credential::
+            where('public_key', $public_key)
+            ->firstOrFail();
+    }
+
 
     /**
      * Check if the Public Key is Blocked. Throws a Json Exception

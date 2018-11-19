@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Commands;
+namespace Api\Commands\Models;
 
 /**
  * This file is part of Setting,
@@ -15,28 +15,28 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Console\GeneratorCommand;
 
-class MakeApiToken extends GeneratorCommand
+class PermissionGroup extends GeneratorCommand
 {
     /**
      * The console command name.
      *
      * @var string
      */
-    protected $name = 'prionapi:api_token_user';
+    protected $name = 'prionapi:model_permission_group';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create Api Token User Model';
+    protected $description = 'Create Api Permission Group Command Model';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Api Token User Model';
+    protected $type = 'Api Permission Group Command Model';
 
     /**
      * Get the stub file for the generator.
@@ -45,7 +45,7 @@ class MakeApiToken extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__.'/stubs/api_token_user.stub';
+        return __DIR__.'/stubs/permission_group.stub';
     }
 
     /**
@@ -55,7 +55,7 @@ class MakeApiToken extends GeneratorCommand
      */
     protected function getNameInput()
     {
-        return config('api.models.api_token', 'TokenUser');
+        return config('api.models.api_permission_group', 'PermissionGroup');
     }
 
     /**
@@ -66,7 +66,7 @@ class MakeApiToken extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Models\Api';
+        return $rootNamespace . '\Models';
     }
 
     /**

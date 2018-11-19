@@ -1,10 +1,11 @@
 <?php
 
-namespace Api\Models;
+namespace Api\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
+use Api\Models\Scopes;
 
-class ApiTokenUser extends Model
+class CredentialPermission extends Model
 {
 
     /**
@@ -23,7 +24,18 @@ class ApiTokenUser extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('prionapi.tables.api_token_user');
+        $this->table = config('prionapi.tables.api_credential_permissions');
     }
+
+    /**
+     * The "boot" method of the model
+     *
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new Scopes\NotExpiredScope);
+    }
+
 
 }

@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+use Api\Models;
+
+class PermissionGroupPermission extends Api\Models\PermissionGroupPermission
+{
+    //
+}

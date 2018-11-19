@@ -37,7 +37,7 @@ class ApiCredentialObserver
      *
      * @param Setting\Models\Settign $setting
      */
-    public function created(Models\ApiCredential $credential)
+    public function created(Models\Api\Credential $credential)
     {
         $this->log($credential->id);
     }
@@ -48,7 +48,7 @@ class ApiCredentialObserver
      *
      * @param Setting\Models\Setting $setting
      */
-    public function updated(Models\ApiCredential $credential)
+    public function updated(Models\Api\Credential $credential)
     {
         $original = $credential->getOriginal();
         $this->log($credential->id, $origial->value);
@@ -61,7 +61,7 @@ class ApiCredentialObserver
      *
      * @param Models\ApiCredential $credential
      */
-    public function retrieved(Models\ApiCredential $credential)
+    public function retrieved(Models\Api\Credential $credential)
     {
     }
 

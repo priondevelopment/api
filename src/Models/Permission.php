@@ -4,7 +4,7 @@ namespace Api\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ApiCredentialPermission extends Model
+class Permission extends Model
 {
 
     /**
@@ -23,7 +23,7 @@ class ApiCredentialPermission extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('prionapi.tables.api_credential_permission');
+        $this->table = config('prionapi.tables.permissions');
     }
 
 }

@@ -36,10 +36,7 @@ class TokenService
         $brute = $this->blocked($token);
 
         try {
-            $token = Models\ApiToken::
-                where('token', $token)
-                ->where('type', $type)
-                ->firstOrFail();
+            $token = $this->lookupToken($token, $type);
         } catch (ModelNotFoundException $e) {
             $brute->attempt($token);
             $this->error->code('2011');
@@ -47,6 +44,54 @@ class TokenService
 
         return $token;
     }
+
+
+    /**
+     * Lookup a Token in the Database. If cache is active, check the cache.
+     *
+     * @param $token
+     * @param $type
+     * @return mixed
+     */
+    protected function lookupToken($token, $type)
+    {
+        if (!config('prionapi.use_cache')) {
+            return $this->lookupTokenQuery($token, $type);
+        }
+
+        $cacheKey = $this->cacheKey($type, $token);
+        $cacheTtl = config('prionapi.cache_ttl');
+        $token = $this->cache->remember($cacheKey, $cacheTtl, function ($token, $type) {
+            return $this->lookupTokenQuery($token, $type);
+        });
+
+        $expires = Carbon::parse($token->expires_at, 'UTC');
+        $now = Carbon::now('UTC');
+        if (!$token->active) {
+            $this->error->code('2011');
+        }
+        elseif ($expires->lte($now)) {
+            $this->error->code('2011');
+        }
+
+        return $token;
+    }
+
+    /**
+     * Query to Look Token
+     *
+     * @param $token
+     * @param $type
+     * @return mixed
+     */
+    protected function lookupTokenQuery($token, $type)
+    {
+        return Models\Api\Token::
+            where('token', $token)
+            ->where('type', $type)
+            ->firstOrFail();
+    }
+
 
     /**
      * Create a One Time Use Token
@@ -127,7 +172,7 @@ class TokenService
      */
     protected function build($credentials, $length)
     {
-        $token                      = new Models\ApiToken;
+        $token                      = new Models\Api\Token;
         $token->token               = time() . '_' . $token->id . '_' . str_random($length);
         $token->ip                  = $this->ip();
         $token->device_id           = e(app('request')->input('device_id'));
