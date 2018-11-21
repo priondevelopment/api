@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class PermissionGroupPermission extends Model
 {
 
+    public $timestamps = false;
+
     /**
      * The database table used by the model.
      *

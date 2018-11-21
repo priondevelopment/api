@@ -7,6 +7,7 @@ use Api\Models\Scopes;
 
 class CredentialPermissionGroup extends Model
 {
+    public $timestamps = false;
 
     /**
      * The database table used by the model.

@@ -26,4 +26,24 @@ class PermissionGroup extends Model
         $this->table = config('prionapi.tables.permission_groups');
     }
 
+
+    /**
+     * Pull All Permissions for a Group
+     *
+     */
+    public function permissions()
+    {
+        return $this
+            ->hasManyThrough(\Api\Models\Permission::class, \Api\Models\PermissionGroupPermission::class, 'permission_group_id', 'id');
+    }
+
+
+    /**
+     * Pull All Permission Slugs
+     *
+     */
+    public function getSlugsAttribute()
+    {
+        return $this->permissions->pluck('slug');
+    }
 }

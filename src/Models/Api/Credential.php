@@ -86,7 +86,7 @@ class Credential extends Model
     public function permissions()
     {
         return $this
-            ->hasManyThrough(\Api\Models\Permission::class, \Api\Models\Api\CredentialPermission::class);
+            ->hasManyThrough(\Api\Models\Permission::class, \Api\Models\Api\CredentialPermission::class, 'api_credential_id', 'id');
     }
 
 
@@ -98,7 +98,7 @@ class Credential extends Model
     protected function permissionGroups()
     {
         return $this
-            ->hasManyThrough(\Api\Models\PermissionGroup::class, \Api\Models\Api\CredentialPermissionGroup::class);
+            ->hasManyThrough(\Api\Models\PermissionGroup::class, \Api\Models\Api\CredentialPermissionGroup::class, 'api_credential_id', 'id');
     }
 
 
@@ -107,9 +107,9 @@ class Credential extends Model
      *
      * @return mixed
      */
-    public function getSlugAttributes()
+    public function getSlugAttribute()
     {
-        $slugs = $this->permissionSlugs;
+        $slugs = $this->permission_slugs;
         return $slugs;
     }
 
@@ -118,21 +118,19 @@ class Credential extends Model
      * Pull All Write Permission Slugs
      *
      */
-    public function getPermissionSlugsAttributes()
+    public function getPermissionSlugsAttribute()
     {
         $permissions = $this
-            ->permissions()
-            ->select('slug')
-            ->pluck('slug');
+            ->permissions->pluck('slug');
         $groupPermissions = $this
-            ->permissionGroups();
+            ->permissionGroups;
 
         foreach ($groupPermissions as $groupPermission) {
             $perms = $groupPermission->slugs;
             $permissions = $permissions->merge($perms);
         }
 
-        return $permissions;
+        return $permissions->unique();
     }
 
 }

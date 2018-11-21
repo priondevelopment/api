@@ -46,10 +46,11 @@ class PrionapiSetupTables extends Migration
                     ->integer('user_id')
                     ->default('0');
                 $table
-                    ->dateTime('expires_at');
+                    ->dateTime('expires_at')
+                    ->nullable();
                 $table
                     ->timestamp('created_at')
-                    ->useCurrent();
+                    ->default(DB::raw('CURRENT_TIMESTAMP'));
                 $table
                     ->timestamp('updated_at')
                     ->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
@@ -87,10 +88,11 @@ class PrionapiSetupTables extends Migration
                     ->tinyInteger('active')
                     ->default('0');
                 $table
-                    ->dateTime('expires_at');
+                    ->dateTime('expires_at')
+                    ->nullable();
                 $table
                     ->timestamp('created_at')
-                    ->useCurrent();
+                    ->default(DB::raw('CURRENT_TIMESTAMP'));
                 $table
                     ->timestamp('updated_at')
                     ->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
@@ -127,7 +129,7 @@ class PrionapiSetupTables extends Migration
 				->default('0');
             $table
                 ->timestamp('created_at')
-                ->useCurrent();
+                ->default(DB::raw('CURRENT_TIMESTAMP'));
             $table
                 ->timestamp('updated_at')
                 ->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
@@ -155,7 +157,7 @@ class PrionapiSetupTables extends Migration
                 ->default('0');
             $table
                 ->timestamp('created_at')
-                ->useCurrent();
+                ->default(DB::raw('CURRENT_TIMESTAMP'));
             $table
                 ->timestamp('updated_at')
                 ->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));
@@ -178,10 +180,11 @@ class PrionapiSetupTables extends Migration
                 ->unsignedInteger('permission_id')
                 ->default('0');
 			$table
-                ->dateTime('expires_at');
+                ->dateTime('expires_at')
+                ->nullable();
 			$table
                 ->dateTime('created_at')
-                ->useCurrent();
+                ->default(DB::raw('CURRENT_TIMESTAMP'));
 
 			$table->foreign('permission_group_id')
 				->references('id')->on('{{ $prionapi['tables']['permission_groups'] }}')
@@ -204,10 +207,11 @@ class PrionapiSetupTables extends Migration
                 ->unsignedInteger('permission_group_id')
                 ->default('0');
             $table
-                ->dateTime('expires_at');
+                ->dateTime('expires_at')
+                ->nullable();
             $table
                 ->dateTime('created_at')
-                ->useCurrent();
+                ->default(DB::raw('CURRENT_TIMESTAMP'));
 
             $table->foreign('api_credential_id')
                 ->references('id')->on('{{ $prionapi['tables']['api_credentials'] }}')
@@ -230,16 +234,11 @@ class PrionapiSetupTables extends Migration
                 ->unsignedInteger('permission_id')
                 ->default('0');
             $table
-                ->tinyInteger('read')
-                ->default('0');
-            $table
-                ->tinyInteger('write')
-                ->default('0');
-            $table
-                ->dateTime('expires_at');
+                ->dateTime('expires_at')
+                ->nullable();
             $table
                 ->timestamp('created_at')
-                ->useCurrent();
+                ->default(DB::raw('CURRENT_TIMESTAMP'));
             $table
                 ->timestamp('updated_at')
                 ->default(DB::raw('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'));

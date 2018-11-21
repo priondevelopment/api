@@ -22,10 +22,8 @@ use Closure;
 use Api\Models;
 use Exception;
 
-class External
+class Internal extends ValidationMiddleware
 {
-
-    private $error;
 
     public function __construct()
     {
@@ -41,9 +39,9 @@ class External
      * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $permissions)
+    public function handle($request, Closure $next)
     {
-
+        $permissions = array_slice(func_get_args(), 2);
         $token = $this->token();
         if (!$token->credentials->internal) {
             $this->error->code('2021');
@@ -57,45 +55,4 @@ class External
 
     }
 
-
-    /**
-     * Pull Token and Make Sure Token is Valid
-     *
-     * @return mixed
-     */
-    public function token()
-    {
-        $this->error->required(['token','hash']);
-        $input = app('input')->only(['token','hash']);
-
-        try {
-            $token = Models\Api\Token::
-                where('token', $input['token'])
-                ->findOrFail();
-        } catch (Exception $e) {
-            $this->error->code('2010');
-        }
-        $token->compareHash($input['hash']);
-
-        return $token;
-    }
-
-
-    /**
-     * Check if Permissions are Valid
-     *
-     * @param $token
-     */
-    public function permissions($token, $permissions)
-    {
-        $credentialPermission = $token->credential->permission_slugs;
-        $permissions = collect($permissions);
-        $compare = $credentialPermission->intersect($permissions);
-
-        if ($compare->count()) {
-            return true;
-        }
-
-        $this->error->code('2020');
-    }
 }

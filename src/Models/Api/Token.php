@@ -54,7 +54,7 @@ class Token extends Model
     public function credentials()
     {
         return $this
-            ->belongsTo('\Api\Models\ApiCredential','api_credential_id');
+            ->belongsTo(\Api\Models\Api\Credential::class,'api_credential_id');
     }
 
 
@@ -77,9 +77,32 @@ class Token extends Model
      */
     public function compareHash($hash)
     {
+        // No Need to Compare Hash, Hashing is Not Required
+        if (config('prionapi.auth_method') == 'single') {
+           return true;
+        }
+
         $serverHash = $this->hash;
         if ($hash != $serverHash) {
-            app()->error()->code('2010');
+            app()->make('error')->code('2010');
+        }
+
+        return true;
+    }
+
+
+    /**
+     * Determine if the Token is Valid
+     *
+     */
+    public function getValidAttribute()
+    {
+        if (!$this->active) {
+            app()->make('error')->code(2016);
+        }
+
+        if (!$this->credentials OR !$this->credentials->count()) {
+            app()->make('error')->code(2022);
         }
 
         return true;

@@ -11,6 +11,7 @@ namespace Api\Http\Controllers;
 */
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 
 use Api\Models;
 
@@ -127,7 +128,7 @@ class AuthController extends Controller
      *
      * Find the hash for a given token for testing
      */
-    public function postHash()
+    public function postHash(Request $request)
     {
         $environment = app()->environment();
         if ($environment != 'local') {
@@ -135,8 +136,9 @@ class AuthController extends Controller
         }
 
         $this->error->required(['token']);
-        $token = $this->TokenService->get($this->input['token'], 'once');
-        $this->data['message'] = $token->hash;
+        $type = $request->has('type') ? $request->get('type') : 'once';
+        $token = $this->TokenService->get($this->input['token'], $type);
+        $this->data['secret'] = $token->hash;
 
         return response()->json($this->data);
     }

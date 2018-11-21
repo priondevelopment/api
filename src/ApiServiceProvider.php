@@ -55,8 +55,8 @@ class ApiServiceProvider extends ServiceProvider
      * @var array
      */
     protected $routes = [
-        'api',
         'auth',
+        'api',
     ];
 
     /**
@@ -113,16 +113,9 @@ class ApiServiceProvider extends ServiceProvider
         if (!$this->app['config']->get('prionapi.middleware.register')) {
             return;
         }
-        $router = $this->app['router'];
-        if (method_exists($router, 'middleware')) {
-            $registerMethod = 'middleware';
-        } elseif (method_exists($router, 'aliasMiddleware')) {
-            $registerMethod = 'aliasMiddleware';
-        } else {
-            return;
-        }
+
         foreach ($this->middlewares as $key => $class) {
-            $router->$registerMethod($key, $class);
+            $this->app->routeMiddleware([$key => $class]);
         }
     }
 

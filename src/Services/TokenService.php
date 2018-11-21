@@ -61,9 +61,10 @@ class TokenService
 
         $cacheKey = $this->cacheKey($type, $token);
         $cacheTtl = config('prionapi.cache_ttl');
-        $token = $this->cache->remember($cacheKey, $cacheTtl, function ($token, $type) {
-            return $this->lookupTokenQuery($token, $type);
-        });
+        $token = $this->cache->remember($cacheKey, $cacheTtl,
+            function () use ($token, $type) {
+                return $this->lookupTokenQuery($token, $type);
+            });
 
         $expires = Carbon::parse($token->expires_at, 'UTC');
         $now = Carbon::now('UTC');
